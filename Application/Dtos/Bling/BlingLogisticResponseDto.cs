@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Infrastructure.Dtos.Bling;
+namespace Application.Dtos.Bling;
 
 public class BlingLogisticResponseDto
 {

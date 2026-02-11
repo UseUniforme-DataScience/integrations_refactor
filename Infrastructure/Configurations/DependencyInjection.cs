@@ -1,7 +1,10 @@
+using Application.Interfaces.Bling;
 using Application.Interfaces.Shopify;
+using Application.Services.Bling;
 using Application.Services.Shopify;
 using Domain.Interfaces.Repositories.Shopify;
-using Infrastructure.Http;
+using Infrastructure.Http.Bling;
+using Infrastructure.Http.Shopify;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Repositories.Shopify;
 using Microsoft.EntityFrameworkCore;
@@ -48,8 +51,10 @@ public static class DependencyInjection
 
         // Http clients / integrações externas
         services.AddShopifyClient(configuration);
+        services.AddBlingTokenClient(configuration);
 
         // Services
+        services.AddSingleton<IBlingTokenService, BlingTokenService>();
         services.AddScoped<IShopifyOrderService, ShopifyOrderService>();
         services.AddScoped<IShopifyProductService, ShopifyProductService>();
         services.AddScoped<IShopifyCustomerService, ShopifyCustomerService>();

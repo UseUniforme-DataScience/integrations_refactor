@@ -2,7 +2,7 @@ using Application.Interfaces.Shopify;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure.Http;
+namespace Infrastructure.Http.Shopify;
 
 public static class ServiceCollectionExtensions
 {

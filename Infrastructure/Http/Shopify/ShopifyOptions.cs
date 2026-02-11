@@ -1,4 +1,4 @@
-namespace Infrastructure.Http;
+namespace Infrastructure.Http.Shopify;
 
 public class ShopifyOptions
 {

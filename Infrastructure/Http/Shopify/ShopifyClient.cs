@@ -5,7 +5,7 @@ using Application.Dtos.Shopify;
 using Application.Interfaces.Shopify;
 using Microsoft.Extensions.Options;
 
-namespace Infrastructure.Http;
+namespace Infrastructure.Http.Shopify;
 
 public class ShopifyClient : IShopifyClient
 {
