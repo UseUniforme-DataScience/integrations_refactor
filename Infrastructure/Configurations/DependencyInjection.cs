@@ -1,9 +1,12 @@
 using Application.Interfaces.Bling;
+using Application.Interfaces.Klaviyo;
 using Application.Interfaces.Shopify;
 using Application.Services.Bling;
+using Application.Services.Klaviyo;
 using Application.Services.Shopify;
 using Domain.Interfaces.Repositories.Shopify;
 using Infrastructure.Http.Bling;
+using Infrastructure.Http.Klaviyo;
 using Infrastructure.Http.Shopify;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Repositories.Shopify;
@@ -53,6 +56,7 @@ public static class DependencyInjection
         services.AddShopifyClient(configuration);
         services.AddBlingTokenClient();
         services.AddBlingClient();
+        services.AddKlaviyoClient();
 
         // Services
         //Bling
@@ -66,6 +70,9 @@ public static class DependencyInjection
         services.AddScoped<IShopifyOrderService, ShopifyOrderService>();
         services.AddScoped<IShopifyProductService, ShopifyProductService>();
         services.AddScoped<IShopifyCustomerService, ShopifyCustomerService>();
+
+        // Klaviyo
+        services.AddScoped<IKlaviyoEventService, KlaviyoEventService>();
 
         // Repositories
         services.AddScoped<IShopifyOrderRepository, ShopifyOrderRepository>();
