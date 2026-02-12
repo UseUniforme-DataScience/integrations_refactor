@@ -1,74 +1,91 @@
-// using System.Net.Cache;
-// using System.Net.Http.Headers;
-// using System.Net.Http.Json;
-// using System.Text;
-// using System.Text.Json;
-// using Application.Dtos.Bling;
-// using Application.Interfaces.Bling;
-// using Microsoft.Extensions.Configuration;
-// using Microsoft.Extensions.Options;
+using System.Net.Http.Headers;
+using System.Text.Json;
+using Application.Dtos.Bling;
+using Application.Interfaces.Bling;
+using Microsoft.Extensions.Configuration;
 
-// namespace Infrastructure.Http.Bling
-// {
-//     public class BlingClient : IBlingClient
-//     {
-//         private HttpClient _httpClient;
-//         private BlingOptions _options;
-//         private string _clientIdAndSecretBase64;
-//         private string _baseUrl;
-//         private string _codeUrl;
-//         private string _clientId;
-//         private string _clientSecret;
-//         private string _code;
-//         private string _tokenBaseUrl;
-//         private static readonly JsonSerializerOptions JsonOptions = new()
-//         {
-//             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-//             PropertyNameCaseInsensitive = true,
-//         };
+namespace Infrastructure.Http.Bling;
 
-//         public BlingClient(
-//             HttpClient httpClient,
-//             IOptions<BlingOptions> options,
-//             IConfiguration configuration
-//         )
-//         {
-//             _code = GetCodeAsync().GetAwaiter().GetResult();
+public class BlingClient : IBlingClient
+{
+    private readonly HttpClient _httpClient;
+    private readonly string _baseUrl;
 
-//             _options = options.Value;
+    public BlingClient(
+        HttpClient httpClient,
+        IConfiguration configuration,
+        IBlingTokenClient tokenClient
+    )
+    {
+        _httpClient = httpClient;
 
-//             _httpClient.BaseAddress = new Uri(_baseUrl + "/");
-//             _httpClient.DefaultRequestHeaders.Add(
-//                 "Authorization",
-//                 $"Bearer {_options.AccessToken}"
-//             );
-//             _httpClient.DefaultRequestHeaders.Accept.Add(
-//                 new MediaTypeWithQualityHeaderValue("application/json")
-//             );
-//         }
+        var accessToken =
+            tokenClient.GetOrRefreshAccessTokenAsync().GetAwaiter().GetResult()?.AccessToken
+            ?? throw new InvalidOperationException("Failed to get access token");
 
-//         public Task<BlingLogisticResponseDto?> GetLogisticAsync(
-//             long logisticId,
-//             CancellationToken cancellationToken = default
-//         )
-//         {
-//             throw new NotImplementedException();
-//         }
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+            "Bearer",
+            accessToken
+        );
 
-//         public Task<BlingNfeResponseDto?> GetNfeAsync(
-//             long nfeId,
-//             CancellationToken cancellationToken = default
-//         )
-//         {
-//             throw new NotImplementedException();
-//         }
+        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
-//         public Task<BlingOrderResponseDto?> GetOrderAsync(
-//             long id,
-//             CancellationToken cancellationToken = default
-//         )
-//         {
-//             throw new NotImplementedException();
-//         }
-//     }
-// }
+        _baseUrl =
+            configuration["Bling:BaseUrl"]
+            ?? throw new InvalidOperationException("Bling base URL is not configured");
+    }
+
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNameCaseInsensitive = true,
+    };
+
+    public async Task<BlingOrderSearchResponseDto?> SearchOrderbyShopiyIdAsync(
+        long shopifyId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var url = new Uri($"{_baseUrl}/pedidos/vendas?numerosLojas[]={shopifyId}");
+        var response = await _httpClient.GetAsync(url, cancellationToken);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync(cancellationToken);
+        return JsonSerializer.Deserialize<BlingOrderSearchResponseDto>(content, JsonOptions);
+    }
+
+    public async Task<BlingOrderResponseDto?> GetOrderByIdAsync(
+        long orderId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var url = new Uri($"{_baseUrl}/pedidos/vendas/{orderId}");
+        var response = await _httpClient.GetAsync(url, cancellationToken);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync(cancellationToken);
+        return JsonSerializer.Deserialize<BlingOrderResponseDto>(content, JsonOptions);
+    }
+
+    public async Task<BlingInvoiceResponseDto?> GetInvoiceByIdAsync(
+        long invoiceId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var url = new Uri($"{_baseUrl}/nfe/{invoiceId}");
+        var response = await _httpClient.GetAsync(url, cancellationToken);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync(cancellationToken);
+        return JsonSerializer.Deserialize<BlingInvoiceResponseDto>(content, JsonOptions);
+    }
+
+    public async Task<BlingLogisticResponseDto?> GetLogisticByIdAsync(
+        long logisticId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var url = new Uri($"{_baseUrl}/logisticas/objetos/{logisticId}");
+        var response = await _httpClient.GetAsync(url, cancellationToken);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync(cancellationToken);
+        return JsonSerializer.Deserialize<BlingLogisticResponseDto>(content, JsonOptions);
+    }
+}

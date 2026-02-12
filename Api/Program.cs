@@ -24,9 +24,6 @@ var config = builder.Configuration.AddJsonFile(
     reloadOnChange: true
 );
 
-Console.WriteLine("Host: " + builder.Configuration["MySql:Host"]);
-Console.WriteLine("Database: " + builder.Configuration["MySql:Database"]);
-
 // ======================================================
 // Infrastructure/ Dependencies injection
 // ======================================================

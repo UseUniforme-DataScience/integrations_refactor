@@ -51,10 +51,18 @@ public static class DependencyInjection
 
         // Http clients / integrações externas
         services.AddShopifyClient(configuration);
-        services.AddBlingTokenClient(configuration);
+        services.AddBlingTokenClient();
+        services.AddBlingClient();
 
         // Services
+        //Bling
         services.AddSingleton<IBlingTokenService, BlingTokenService>();
+
+        services.AddScoped<IBlingOrderService, BlingOrderService>();
+        services.AddScoped<IBlingLogisticService, BlingLogisticService>();
+        services.AddScoped<IBlingInvoiceService, BlingInvoiceService>();
+
+        //Shopify
         services.AddScoped<IShopifyOrderService, ShopifyOrderService>();
         services.AddScoped<IShopifyProductService, ShopifyProductService>();
         services.AddScoped<IShopifyCustomerService, ShopifyCustomerService>();

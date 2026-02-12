@@ -8,14 +8,16 @@ public static class BlingServiceCollection
 {
     public const string BlingTokenHttpClientName = "BlingToken";
 
-    public static IServiceCollection AddBlingTokenClient(
-        this IServiceCollection services,
-        IConfiguration configuration
-    )
+    public static IServiceCollection AddBlingTokenClient(this IServiceCollection services)
     {
-        services.Configure<BlingOptions>(configuration.GetSection(BlingOptions.SectionName));
         services.AddHttpClient(BlingTokenHttpClientName);
         services.AddSingleton<IBlingTokenClient, BlingTokenClient>();
+        return services;
+    }
+
+    public static IServiceCollection AddBlingClient(this IServiceCollection services)
+    {
+        services.AddHttpClient<IBlingClient, BlingClient>();
         return services;
     }
 }

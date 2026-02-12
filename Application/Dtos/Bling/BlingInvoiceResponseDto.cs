@@ -2,13 +2,13 @@ using System.Text.Json.Serialization;
 
 namespace Application.Dtos.Bling;
 
-public class BlingNfeResponseDto
+public class BlingInvoiceResponseDto
 {
     [JsonPropertyName("data")]
-    public BlingNfeDto Data { get; set; } = null!;
+    public BlingInvoiceDto Data { get; set; } = null!;
 }
 
-public class BlingNfeDto
+public class BlingInvoiceDto
 {
     [JsonPropertyName("id")]
     public long Id { get; set; }
@@ -22,7 +22,6 @@ public class BlingNfeDto
     [JsonPropertyName("numero")]
     public string Numero { get; set; } = null!;
 
-    // Mantido como string por conter data + hora em formato específico
     [JsonPropertyName("dataEmissao")]
     public string DataEmissao { get; set; } = null!;
 
@@ -302,7 +301,6 @@ public class BlingNfeDocumentoReferenciadoDto
 
 public class BlingNfeParcelaDto
 {
-    // Mantido como string para flexibilidade de formato
     [JsonPropertyName("data")]
     public string Data { get; set; } = null!;
 
