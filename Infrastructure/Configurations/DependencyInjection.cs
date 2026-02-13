@@ -1,12 +1,15 @@
 using Application.Interfaces.Bling;
 using Application.Interfaces.Klaviyo;
+using Application.Interfaces.Pipedrive;
 using Application.Interfaces.Shopify;
 using Application.Services.Bling;
 using Application.Services.Klaviyo;
+using Application.Services.Pipedrive;
 using Application.Services.Shopify;
 using Domain.Interfaces.Repositories.Shopify;
 using Infrastructure.Http.Bling;
 using Infrastructure.Http.Klaviyo;
+using Infrastructure.Http.Pipedrive;
 using Infrastructure.Http.Shopify;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Repositories.Shopify;
@@ -53,10 +56,17 @@ public static class DependencyInjection
         });
 
         // Http clients / integrações externas
+        // Shopify
         services.AddShopifyClient(configuration);
+        // Bling
         services.AddBlingTokenClient();
         services.AddBlingClient();
+        // Klaviyo
         services.AddKlaviyoClient();
+        // Pipedrive
+        services.AddPipedriveDealClient();
+        services.AddPipedriveActivityClient();
+        services.AddPipedriveNoteClient();
 
         // Services
         //Bling
@@ -73,6 +83,11 @@ public static class DependencyInjection
 
         // Klaviyo
         services.AddScoped<IKlaviyoEventService, KlaviyoEventService>();
+
+        // Pipedrive
+        services.AddScoped<IPipedriveDealService, PipedriveDealService>();
+        services.AddScoped<IPipedriveNoteService, PipedriveNoteService>();
+        services.AddScoped<IPipedriveActivityService, PipedriveActivityService>();
 
         // Repositories
         services.AddScoped<IShopifyOrderRepository, ShopifyOrderRepository>();

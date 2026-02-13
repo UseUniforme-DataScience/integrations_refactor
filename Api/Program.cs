@@ -7,6 +7,8 @@ DotNetEnv.Env.Load("../.env");
 
 var builder = WebApplication.CreateBuilder(args);
 
+AppContext.SetSwitch("System.Net.DisableIPv6", true);
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
