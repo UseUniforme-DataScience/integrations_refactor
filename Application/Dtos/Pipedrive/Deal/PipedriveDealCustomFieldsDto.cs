@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Application.Dtos.Pipedrive;
+namespace Application.Dtos.Pipedrive.Deal;
 
 public class PipedriveDealCustomFieldsDto
 {
@@ -52,13 +52,4 @@ public class PipedriveDealCustomFieldsDto
 
     [JsonPropertyName("9bc91320d4c2839041e2356a0b1694d9203e901b")]
     public string? TipoDeVenda { get; set; }
-}
-
-public class PipedriveMoneyValueDto
-{
-    [JsonPropertyName("value")]
-    public double? Value { get; set; }
-
-    [JsonPropertyName("currency")]
-    public string? Currency { get; set; }
 }

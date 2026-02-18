@@ -1,4 +1,4 @@
-using Application.Dtos.Pipedrive;
+using Application.Dtos.Pipedrive.Deal;
 using Application.Interfaces.Pipedrive;
 
 namespace Application.Services.Pipedrive;

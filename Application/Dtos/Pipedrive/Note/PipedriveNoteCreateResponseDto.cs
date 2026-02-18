@@ -1,17 +1,14 @@
 using System.Text.Json.Serialization;
 
-namespace Application.Dtos.Pipedrive;
+namespace Application.Dtos.Pipedrive.Note;
 
-public class PipedriveNotesResponseDto
+public class PipedriveNoteCreateResponseDto
 {
     [JsonPropertyName("success")]
     public bool Success { get; set; }
 
     [JsonPropertyName("data")]
-    public List<PipedriveNoteResponseDto> Data { get; set; } = new();
-
-    [JsonPropertyName("additional_data")]
-    public PipedriveNoteAdditionalDataDto? AdditionalData { get; set; }
+    public PipedriveNoteResponseDto? Data { get; set; }
 }
 
 public class PipedriveNoteAdditionalDataDto

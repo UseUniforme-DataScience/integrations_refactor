@@ -1,12 +1,12 @@
 using System.Text.Json.Serialization;
 
-namespace Application.Dtos.Pipedrive;
+namespace Application.Dtos.Pipedrive.Person;
 
-public class PipedriveGetDealResponseDto
+public class PipedrivePersonResponseDto
 {
     [JsonPropertyName("success")]
     public bool Success { get; set; }
 
     [JsonPropertyName("data")]
-    public PipedriveDealResponseDto? Data { get; set; }
+    public PipedrivePersonDataDto? Data { get; set; }
 }

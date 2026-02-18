@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Application.Dtos.Pipedrive;
+namespace Application.Dtos.Pipedrive.Deal;
 
 // response for default deals route
 // /deals
@@ -13,5 +13,5 @@ public class PipedriveDealsResponseDto
     public List<PipedriveDealResponseDto> Data { get; set; } = [];
 
     [JsonPropertyName("additional_data")]
-    public PipedriveDealAdditionalDataDto? AdditionalData { get; set; }
+    public PipedriveAdditionalDataDto? AdditionalData { get; set; }
 }

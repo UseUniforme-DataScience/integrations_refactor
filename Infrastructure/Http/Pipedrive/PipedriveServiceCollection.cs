@@ -22,4 +22,10 @@ public static class PipedriveServiceCollection
         services.AddHttpClient<IPipedriveNoteClient, PipedriveNoteClient>();
         return services;
     }
+
+    public static IServiceCollection AddPipedrivePersonClient(this IServiceCollection services)
+    {
+        services.AddHttpClient<IPipedrivePersonClient, PipedrivePersonClient>();
+        return services;
+    }
 }

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Application.Dtos.Pipedrive;
+namespace Application.Dtos.Pipedrive.Deal;
 
 public class PipedriveDealResponseDto
 {
@@ -8,34 +8,34 @@ public class PipedriveDealResponseDto
     public int Id { get; set; }
 
     [JsonPropertyName("title")]
-    public string Title { get; set; } = string.Empty;
+    public string? Title { get; set; }
 
     [JsonPropertyName("creator_user_id")]
-    public int CreatorUserId { get; set; }
+    public int? CreatorUserId { get; set; }
 
     [JsonPropertyName("value")]
-    public double Value { get; set; }
+    public double? Value { get; set; }
 
     [JsonPropertyName("person_id")]
-    public int PersonId { get; set; }
+    public int? PersonId { get; set; }
 
     [JsonPropertyName("org_id")]
     public int? OrgId { get; set; }
 
     [JsonPropertyName("stage_id")]
-    public int StageId { get; set; }
+    public int? StageId { get; set; }
 
     [JsonPropertyName("currency")]
-    public string Currency { get; set; } = string.Empty;
+    public string? Currency { get; set; }
 
     [JsonPropertyName("add_time")]
-    public string AddTime { get; set; } = string.Empty;
+    public string? AddTime { get; set; }
 
     [JsonPropertyName("update_time")]
-    public string UpdateTime { get; set; } = string.Empty;
+    public string? UpdateTime { get; set; }
 
     [JsonPropertyName("status")]
-    public string Status { get; set; } = string.Empty;
+    public string? Status { get; set; }
 
     [JsonPropertyName("probability")]
     public int? Probability { get; set; }
@@ -44,13 +44,13 @@ public class PipedriveDealResponseDto
     public string? LostReason { get; set; }
 
     [JsonPropertyName("visible_to")]
-    public int VisibleTo { get; set; }
+    public int? VisibleTo { get; set; }
 
     [JsonPropertyName("close_time")]
     public string? CloseTime { get; set; }
 
     [JsonPropertyName("pipeline_id")]
-    public int PipelineId { get; set; }
+    public int? PipelineId { get; set; }
 
     [JsonPropertyName("won_time")]
     public string? WonTime { get; set; }
@@ -77,13 +77,13 @@ public class PipedriveDealResponseDto
     public PipedriveDealCustomFieldsDto? CustomFields { get; set; }
 
     [JsonPropertyName("owner_id")]
-    public int OwnerId { get; set; }
+    public int? OwnerId { get; set; }
 
     [JsonPropertyName("label_ids")]
-    public List<int> LabelIds { get; set; } = new();
+    public List<int>? LabelIds { get; set; }
 
     [JsonPropertyName("is_deleted")]
-    public bool IsDeleted { get; set; }
+    public bool? IsDeleted { get; set; }
 
     [JsonPropertyName("origin")]
     public string? Origin { get; set; }
@@ -107,7 +107,7 @@ public class PipedriveDealResponseDto
     public double? Mrr { get; set; }
 
     [JsonPropertyName("is_archived")]
-    public bool IsArchived { get; set; }
+    public bool? IsArchived { get; set; }
 
     [JsonPropertyName("archive_time")]
     public string? ArchiveTime { get; set; }

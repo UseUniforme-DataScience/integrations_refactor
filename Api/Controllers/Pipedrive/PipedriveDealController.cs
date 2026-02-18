@@ -1,4 +1,4 @@
-using Application.Dtos.Pipedrive;
+using Application.Dtos.Pipedrive.Deal;
 using Application.Interfaces.Pipedrive;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +6,7 @@ namespace Api.Controllers.Pipedrive;
 
 [ApiController]
 [Route("api/pipedrive/deals")]
-public class PipedriveDealController(IPipedriveDealClient dealClient) : ControllerBase
+public class PipedriveDealController(IPipedriveDealService dealService) : ControllerBase
 {
     [HttpGet("{dealId}")]
     public async Task<IActionResult> GetDealByIdAsync(
@@ -14,7 +14,7 @@ public class PipedriveDealController(IPipedriveDealClient dealClient) : Controll
         CancellationToken cancellationToken = default
     )
     {
-        var result = await dealClient.GetDealByIdAsync(dealId, cancellationToken);
+        var result = await dealService.GetDealByIdAsync(dealId, cancellationToken);
         return result is null ? NotFound() : Ok(result);
     }
 
@@ -22,19 +22,19 @@ public class PipedriveDealController(IPipedriveDealClient dealClient) : Controll
     public async Task<IActionResult> GetDealsByPersonAsync(
         int personId,
         CancellationToken cancellationToken = default
-    ) => Ok(await dealClient.GetDealsByPersonAsync(personId, cancellationToken));
+    ) => Ok(await dealService.GetDealsByPersonAsync(personId, cancellationToken));
 
     [HttpGet("person/{personId}/archived")]
     public async Task<IActionResult> GetDealsByPersonWithArchivedAsync(
         int personId,
         CancellationToken cancellationToken = default
-    ) => Ok(await dealClient.GetDealsByPersonWithArchivedAsync(personId, cancellationToken));
+    ) => Ok(await dealService.GetDealsByPersonWithArchivedAsync(personId, cancellationToken));
 
     [HttpGet("person/{personId}/open")]
     public async Task<IActionResult> GetOpenDealsByPersonAsync(
         int personId,
         CancellationToken cancellationToken = default
-    ) => Ok(await dealClient.GetOpenDealsByPersonAsync(personId, cancellationToken));
+    ) => Ok(await dealService.GetOpenDealsByPersonAsync(personId, cancellationToken));
 
     [HttpPost]
     public async Task<IActionResult> CreateDealAsync(
@@ -44,7 +44,7 @@ public class PipedriveDealController(IPipedriveDealClient dealClient) : Controll
     {
         try
         {
-            var result = await dealClient.CreateDealAsync(deal, cancellationToken);
+            var result = await dealService.CreateDealAsync(deal, cancellationToken);
             return result is null ? BadRequest() : Ok(result);
         }
         catch (Exception ex)
@@ -62,7 +62,7 @@ public class PipedriveDealController(IPipedriveDealClient dealClient) : Controll
     {
         try
         {
-            var result = await dealClient.UpdateDealAsync(dealId, deal, cancellationToken);
+            var result = await dealService.UpdateDealAsync(dealId, deal, cancellationToken);
             return result is null ? NotFound() : Ok(result);
         }
         catch (Exception ex)
@@ -79,7 +79,7 @@ public class PipedriveDealController(IPipedriveDealClient dealClient) : Controll
     {
         try
         {
-            await dealClient.DeleteDealAsync(dealId, cancellationToken);
+            await dealService.DeleteDealAsync(dealId, cancellationToken);
             return Ok();
         }
         catch (Exception ex)
@@ -94,7 +94,7 @@ public class PipedriveDealController(IPipedriveDealClient dealClient) : Controll
         CancellationToken cancellationToken = default
     )
     {
-        var result = await dealClient.DuplicateDealAsync(dealId, cancellationToken);
+        var result = await dealService.DuplicateDealAsync(dealId, cancellationToken);
         return result is null ? BadRequest() : Ok(result);
     }
 
@@ -107,7 +107,7 @@ public class PipedriveDealController(IPipedriveDealClient dealClient) : Controll
     {
         try
         {
-            var result = await dealClient.DuplicateAndUpdateDealAsync(
+            var result = await dealService.DuplicateAndUpdateDealAsync(
                 dealId,
                 deal,
                 cancellationToken
@@ -129,7 +129,7 @@ public class PipedriveDealController(IPipedriveDealClient dealClient) : Controll
     {
         try
         {
-            var result = await dealClient.MergeDealsAsync(
+            var result = await dealService.MergeDealsAsync(
                 primaryDealId,
                 secondaryDealId,
                 cancellationToken

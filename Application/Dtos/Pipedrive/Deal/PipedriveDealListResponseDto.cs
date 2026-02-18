@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
+using Application.Dtos.Pipedrive.Person;
 
-namespace Application.Dtos.Pipedrive;
+namespace Application.Dtos.Pipedrive.Deal;
 
 public class PipedriveDealListResponseDto
 {

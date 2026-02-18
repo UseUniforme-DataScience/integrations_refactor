@@ -1,7 +1,8 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Application.Dtos.Pipedrive;
+using System.Text.Json.Serialization;
+using Application.Dtos.Pipedrive.Note;
 using Application.Interfaces.Pipedrive;
 using Microsoft.Extensions.Configuration;
 
@@ -17,6 +18,7 @@ public class PipedriveNoteClient : IPipedriveNoteClient
     {
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
         PropertyNameCaseInsensitive = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     };
 
     public PipedriveNoteClient(HttpClient httpClient, IConfiguration configuration)
@@ -47,15 +49,15 @@ public class PipedriveNoteClient : IPipedriveNoteClient
         return JsonSerializer.Deserialize<PipedriveNotesResponseDto>(content, JsonOptions);
     }
 
-    public async Task<PipedriveNoteResponseDto?> CreateNoteAsync(
+    public async Task<PipedriveNoteCreateResponseDto?> CreateNoteAsync(
         PipedriveNoteRequestDto note,
         CancellationToken cancellationToken = default
     )
     {
         var url = new Uri($"{_oldBaseUrl}/notes");
-        var response = await _httpClient.PostAsJsonAsync(url, note, cancellationToken);
+        var response = await _httpClient.PostAsJsonAsync(url, note, JsonOptions, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedriveNoteResponseDto>(content, JsonOptions);
+        return JsonSerializer.Deserialize<PipedriveNoteCreateResponseDto>(content, JsonOptions);
     }
 }

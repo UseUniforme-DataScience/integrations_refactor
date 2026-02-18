@@ -1,18 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Application.Dtos.Pipedrive;
-
-public class PipedriveActivitiesResponseDto
-{
-    [JsonPropertyName("success")]
-    public bool Success { get; set; }
-
-    [JsonPropertyName("data")]
-    public List<PipedriveActivityDto> Data { get; set; } = [];
-
-    [JsonPropertyName("additional_data")]
-    public PipedriveAdditionalDataDto AdditionalData { get; set; } = new();
-}
+namespace Application.Dtos.Pipedrive.Activities;
 
 public class PipedriveActivityDto
 {
@@ -77,7 +65,7 @@ public class PipedriveActivityDto
     public string? Location { get; set; }
 
     [JsonPropertyName("participants")]
-    public List<object> Participants { get; set; } = new();
+    public List<PipedriveActivityParticipants>? Participants { get; set; }
 
     [JsonPropertyName("conference_meeting_client")]
     public string? ConferenceMeetingClient { get; set; }
@@ -96,10 +84,4 @@ public class PipedriveActivityDto
 
     [JsonPropertyName("note")]
     public string? Note { get; set; }
-}
-
-public class PipedriveAdditionalDataDto
-{
-    [JsonPropertyName("next_cursor")]
-    public string? NextCursor { get; set; }
 }

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Application.Dtos.Pipedrive;
+namespace Application.Dtos.Pipedrive.Note;
 
 public class PipedriveNoteResponseDto
 {
@@ -8,7 +8,7 @@ public class PipedriveNoteResponseDto
     public int Id { get; set; }
 
     [JsonPropertyName("user_id")]
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
 
     [JsonPropertyName("deal_id")]
     public int? DealId { get; set; }
@@ -26,59 +26,47 @@ public class PipedriveNoteResponseDto
     public int? ProjectId { get; set; }
 
     [JsonPropertyName("content")]
-    public string Content { get; set; } = string.Empty;
+    public string? Content { get; set; }
 
     [JsonPropertyName("add_time")]
-    public DateTime AddTime { get; set; }
+    public string? AddTime { get; set; }
 
     [JsonPropertyName("update_time")]
-    public DateTime UpdateTime { get; set; }
+    public string? UpdateTime { get; set; }
 
     [JsonPropertyName("active_flag")]
-    public bool ActiveFlag { get; set; }
+    public bool? ActiveFlag { get; set; }
 
     [JsonPropertyName("pinned_to_deal_flag")]
-    public bool PinnedToDealFlag { get; set; }
+    public bool? PinnedToDealFlag { get; set; }
 
     [JsonPropertyName("pinned_to_person_flag")]
-    public bool PinnedToPersonFlag { get; set; }
+    public bool? PinnedToPersonFlag { get; set; }
 
     [JsonPropertyName("pinned_to_organization_flag")]
-    public bool PinnedToOrganizationFlag { get; set; }
+    public bool? PinnedToOrganizationFlag { get; set; }
 
     [JsonPropertyName("pinned_to_lead_flag")]
-    public bool PinnedToLeadFlag { get; set; }
+    public bool? PinnedToLeadFlag { get; set; }
 
     [JsonPropertyName("pinned_to_project_flag")]
-    public bool PinnedToProjectFlag { get; set; }
+    public bool? PinnedToProjectFlag { get; set; }
 
     [JsonPropertyName("last_update_user_id")]
     public int? LastUpdateUserId { get; set; }
 
     [JsonPropertyName("organization")]
-    public PipedriveNoteOrganizationDto? Organization { get; set; }
+    public PipedriveNoteNameObjectDto? Organization { get; set; }
 
     [JsonPropertyName("person")]
-    public PipedriveNotePersonDto? Person { get; set; }
+    public PipedriveNoteNameObjectDto? Person { get; set; }
 
     [JsonPropertyName("deal")]
-    public int? Deal { get; set; }
+    public PipedriveNoteObjectDto? Deal { get; set; }
 
     [JsonPropertyName("lead")]
-    public int? Lead { get; set; }
+    public PipedriveNoteObjectDto? Lead { get; set; }
 
     [JsonPropertyName("user")]
-    public int? User { get; set; }
-}
-
-public class PipedriveNoteOrganizationDto
-{
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = string.Empty;
-}
-
-public class PipedriveNotePersonDto
-{
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = string.Empty;
+    public PipedriveNoteUserDto? User { get; set; }
 }

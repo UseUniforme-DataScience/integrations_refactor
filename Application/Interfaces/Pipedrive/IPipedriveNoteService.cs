@@ -1,4 +1,4 @@
-using Application.Dtos.Pipedrive;
+using Application.Dtos.Pipedrive.Note;
 
 namespace Application.Interfaces.Pipedrive;
 
@@ -8,7 +8,7 @@ public interface IPipedriveNoteService
         int dealId,
         CancellationToken cancellationToken = default
     );
-    Task<PipedriveNoteResponseDto?> CreateNoteAsync(
+    Task<PipedriveNoteCreateResponseDto?> CreateNoteAsync(
         PipedriveNoteRequestDto note,
         CancellationToken cancellationToken = default
     );

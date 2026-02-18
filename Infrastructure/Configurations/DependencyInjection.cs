@@ -67,16 +67,17 @@ public static class DependencyInjection
         services.AddPipedriveDealClient();
         services.AddPipedriveActivityClient();
         services.AddPipedriveNoteClient();
+        services.AddPipedrivePersonClient();
 
         // Services
-        //Bling
+        // Bling
         services.AddSingleton<IBlingTokenService, BlingTokenService>();
 
         services.AddScoped<IBlingOrderService, BlingOrderService>();
         services.AddScoped<IBlingLogisticService, BlingLogisticService>();
         services.AddScoped<IBlingInvoiceService, BlingInvoiceService>();
 
-        //Shopify
+        // Shopify
         services.AddScoped<IShopifyOrderService, ShopifyOrderService>();
         services.AddScoped<IShopifyProductService, ShopifyProductService>();
         services.AddScoped<IShopifyCustomerService, ShopifyCustomerService>();
@@ -88,6 +89,7 @@ public static class DependencyInjection
         services.AddScoped<IPipedriveDealService, PipedriveDealService>();
         services.AddScoped<IPipedriveNoteService, PipedriveNoteService>();
         services.AddScoped<IPipedriveActivityService, PipedriveActivityService>();
+        services.AddScoped<IPipedrivePersonService, PipedrivePersonService>();
 
         // Repositories
         services.AddScoped<IShopifyOrderRepository, ShopifyOrderRepository>();

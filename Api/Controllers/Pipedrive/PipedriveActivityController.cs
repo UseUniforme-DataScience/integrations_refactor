@@ -5,19 +5,19 @@ namespace Api.Controllers.Pipedrive;
 
 [ApiController]
 [Route("api/pipedrive/activities")]
-public class PipedriveActivityController(IPipedriveActivityClient activityClient) : ControllerBase
+public class PipedriveActivityController(IPipedriveActivityService activityService) : ControllerBase
 {
     [HttpGet("deal/{dealId}")]
     public async Task<IActionResult> GetActivitiesFromDealAsync(
         int dealId,
         CancellationToken cancellationToken = default
-    ) => Ok(await activityClient.GetActivitiesFromDealAsync(dealId, cancellationToken));
+    ) => Ok(await activityService.GetActivitiesFromDealAsync(dealId, cancellationToken));
 
     [HttpGet("person/{personId}")]
     public async Task<IActionResult> GetActivitiesFromPersonAsync(
         int personId,
         CancellationToken cancellationToken = default
-    ) => Ok(await activityClient.GetActivitiesFromPersonAsync(personId, cancellationToken));
+    ) => Ok(await activityService.GetActivitiesFromPersonAsync(personId, cancellationToken));
 
     [HttpPost("{activityId}/done")]
     public async Task<IActionResult> DoneActivityAsync(
@@ -27,7 +27,7 @@ public class PipedriveActivityController(IPipedriveActivityClient activityClient
     {
         try
         {
-            await activityClient.DoneActivityAsync(activityId, cancellationToken);
+            await activityService.DoneActivityAsync(activityId, cancellationToken);
             return Ok();
         }
         catch (Exception ex)
@@ -44,7 +44,7 @@ public class PipedriveActivityController(IPipedriveActivityClient activityClient
     {
         try
         {
-            await activityClient.DoneAllActivitiesFromDealAsync(dealId, cancellationToken);
+            await activityService.DoneAllActivitiesFromDealAsync(dealId, cancellationToken);
             return Ok();
         }
         catch (Exception ex)

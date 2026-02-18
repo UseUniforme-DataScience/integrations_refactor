@@ -1,4 +1,4 @@
-using Application.Dtos.Pipedrive;
+using Application.Dtos.Pipedrive.Note;
 using Application.Interfaces.Pipedrive;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,13 +6,13 @@ namespace Api.Controllers.Pipedrive;
 
 [ApiController]
 [Route("api/pipedrive/notes")]
-public class PipedriveNoteController(IPipedriveNoteClient noteClient) : ControllerBase
+public class PipedriveNoteController(IPipedriveNoteService noteService) : ControllerBase
 {
     [HttpGet("deal/{dealId}")]
     public async Task<IActionResult> GetNotesFromDealAsync(
         int dealId,
         CancellationToken cancellationToken = default
-    ) => Ok(await noteClient.GetNotesFromDealAsync(dealId, cancellationToken));
+    ) => Ok(await noteService.GetNotesFromDealAsync(dealId, cancellationToken));
 
     [HttpPost]
     public async Task<IActionResult> CreateNoteAsync(
@@ -22,7 +22,7 @@ public class PipedriveNoteController(IPipedriveNoteClient noteClient) : Controll
     {
         try
         {
-            var result = await noteClient.CreateNoteAsync(note, cancellationToken);
+            var result = await noteService.CreateNoteAsync(note, cancellationToken);
             return result is null ? BadRequest() : Ok(result);
         }
         catch (Exception ex)
