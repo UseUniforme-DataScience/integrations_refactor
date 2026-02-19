@@ -8,6 +8,11 @@ public interface IShopifyProductService
         long id,
         CancellationToken cancellationToken = default
     );
+    Task<List<ShopifyProductDto>> GetProductsAsync(
+        DateTime? updatedBefore,
+        DateTime? updatedAfter,
+        CancellationToken cancellationToken = default
+    );
     Task<ShopifyProductDto> UpdateProductAsync(
         ShopifyProductRequestDto product,
         CancellationToken cancellationToken = default

@@ -5,19 +5,19 @@ namespace Application.Interfaces.Pipedrive;
 public interface IPipedriveDealClient
 {
     // get deals by person
-    Task<PipedriveDealsListResponseDto?> GetDealsByPersonAsync(
+    Task<List<PipedriveDealListResponseDto>?> GetDealsByPersonAsync(
         int personId,
         CancellationToken cancellationToken = default
     );
 
     // get deals by person with archived
-    Task<PipedriveDealsListResponseDto?> GetDealsByPersonWithArchivedAsync(
+    Task<List<PipedriveDealListResponseDto>?> GetDealsByPersonWithArchivedAsync(
         int personId,
         CancellationToken cancellationToken = default
     );
 
     // get open deals by person
-    Task<PipedriveDealsResponseDto?> GetOpenDealsByPersonAsync(
+    Task<List<PipedriveDealResponseDto>?> GetOpenDealsByPersonAsync(
         int personId,
         CancellationToken cancellationToken = default
     );

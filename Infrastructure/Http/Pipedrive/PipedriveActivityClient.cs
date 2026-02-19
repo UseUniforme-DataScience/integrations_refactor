@@ -53,15 +53,14 @@ public class PipedriveActivityClient : IPipedriveActivityClient
     )
     {
         var activities = await GetActivitiesFromDealAsync(dealId, cancellationToken);
-        var activitiesData = (activities?.Data) ?? [];
-        foreach (var activity in activitiesData)
+        foreach (var activity in activities ?? [])
         {
             await DoneActivityAsync(activity.Id, cancellationToken);
         }
         return true;
     }
 
-    public async Task<PipedriveActivitiesResponseDto?> GetActivitiesFromDealAsync(
+    public async Task<List<PipedriveActivityDto>?> GetActivitiesFromDealAsync(
         int dealId,
         CancellationToken cancellationToken = default
     )
@@ -70,10 +69,14 @@ public class PipedriveActivityClient : IPipedriveActivityClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedriveActivitiesResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedriveActivitiesResponseDto>(
+            content,
+            JsonOptions
+        );
+        return jsonData?.Data ?? [];
     }
 
-    public async Task<PipedriveActivitiesResponseDto?> GetActivitiesFromPersonAsync(
+    public async Task<List<PipedriveActivityDto>?> GetActivitiesFromPersonAsync(
         int personId,
         CancellationToken cancellationToken = default
     )
@@ -82,6 +85,10 @@ public class PipedriveActivityClient : IPipedriveActivityClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedriveActivitiesResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedriveActivitiesResponseDto>(
+            content,
+            JsonOptions
+        );
+        return jsonData?.Data ?? [];
     }
 }

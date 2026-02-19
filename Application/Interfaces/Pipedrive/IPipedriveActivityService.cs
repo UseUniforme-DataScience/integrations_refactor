@@ -4,11 +4,11 @@ namespace Application.Interfaces.Pipedrive;
 
 public interface IPipedriveActivityService
 {
-    Task<PipedriveActivitiesResponseDto?> GetActivitiesFromDealAsync(
+    Task<List<PipedriveActivityDto>?> GetActivitiesFromDealAsync(
         int dealId,
         CancellationToken cancellationToken = default
     );
-    Task<PipedriveActivitiesResponseDto?> GetActivitiesFromPersonAsync(
+    Task<List<PipedriveActivityDto>?> GetActivitiesFromPersonAsync(
         int personId,
         CancellationToken cancellationToken = default
     );

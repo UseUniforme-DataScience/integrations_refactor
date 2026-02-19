@@ -6,7 +6,7 @@ namespace Application.Services.Pipedrive;
 public class PipedriveActivityService(IPipedriveActivityClient activityClient)
     : IPipedriveActivityService
 {
-    public async Task<PipedriveActivitiesResponseDto?> GetActivitiesFromDealAsync(
+    public async Task<List<PipedriveActivityDto>?> GetActivitiesFromDealAsync(
         int dealId,
         CancellationToken cancellationToken = default
     ) =>
@@ -14,7 +14,7 @@ public class PipedriveActivityService(IPipedriveActivityClient activityClient)
             .GetActivitiesFromDealAsync(dealId, cancellationToken)
             .ConfigureAwait(false);
 
-    public async Task<PipedriveActivitiesResponseDto?> GetActivitiesFromPersonAsync(
+    public async Task<List<PipedriveActivityDto>?> GetActivitiesFromPersonAsync(
         int personId,
         CancellationToken cancellationToken = default
     ) =>

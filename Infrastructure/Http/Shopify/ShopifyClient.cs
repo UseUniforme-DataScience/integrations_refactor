@@ -46,6 +46,32 @@ public class ShopifyClient : IShopifyClient
         return wrapper?.Order;
     }
 
+    public async Task<List<ShopifyOrderDto>?> GetOrdersAsync(
+        DateTime? updatedBefore,
+        DateTime? updatedAfter,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var updatedBreforeString = updatedBefore is not null
+            ? updatedBefore.Value.ToUniversalTime()
+            : DateTime.Now.AddDays(-7).ToUniversalTime();
+        var updatedAfterString = updatedAfter is not null
+            ? updatedAfter.Value.ToUniversalTime()
+            : DateTime.Now.ToUniversalTime();
+        var response = await _httpClient
+            .GetAsync(
+                $"orders.json?updated_at_min={updatedBreforeString}&updated_at_max={updatedAfterString}",
+                cancellationToken
+            )
+            .ConfigureAwait(false);
+        response.EnsureSuccessStatusCode();
+        var content = await response
+            .Content.ReadAsStringAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var wrapper = JsonSerializer.Deserialize<ShopifyOrdersResponseDto>(content, JsonOptions);
+        return wrapper?.Orders;
+    }
+
     public async Task<ShopifyOrderDto?> PutOrderAsync(
         long id,
         ShopifyOrderRequestDto order,
@@ -84,6 +110,32 @@ public class ShopifyClient : IShopifyClient
         return wrapper?.Product;
     }
 
+    public async Task<List<ShopifyProductDto>?> GetProductsAsync(
+        DateTime? updatedBefore,
+        DateTime? updatedAfter,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var updatedBreforeString = updatedBefore is not null
+            ? updatedBefore.Value.ToUniversalTime()
+            : DateTime.Now.AddDays(-7).ToUniversalTime();
+        var updatedAfterString = updatedAfter is not null
+            ? updatedAfter.Value.ToUniversalTime()
+            : DateTime.Now.ToUniversalTime();
+        var response = await _httpClient
+            .GetAsync(
+                $"products.json?updated_at_min={updatedBreforeString}&updated_at_max={updatedAfterString}",
+                cancellationToken
+            )
+            .ConfigureAwait(false);
+        response.EnsureSuccessStatusCode();
+        var content = await response
+            .Content.ReadAsStringAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var wrapper = JsonSerializer.Deserialize<ShopifyProductsResponseDto>(content, JsonOptions);
+        return wrapper?.Products;
+    }
+
     public async Task<ShopifyProductDto?> PutProductAsync(
         long id,
         ShopifyProductRequestDto product,
@@ -120,6 +172,32 @@ public class ShopifyClient : IShopifyClient
             .ConfigureAwait(false);
         var wrapper = JsonSerializer.Deserialize<ShopifyCustomerResponseDto>(content, JsonOptions);
         return wrapper?.Customer;
+    }
+
+    public async Task<List<ShopifyCustomerDto>?> GetCustomersAsync(
+        DateTime? updatedBefore,
+        DateTime? updatedAfter,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var updatedBreforeString = updatedBefore is not null
+            ? updatedBefore.Value.ToUniversalTime()
+            : DateTime.Now.AddDays(-7).ToUniversalTime();
+        var updatedAfterString = updatedAfter is not null
+            ? updatedAfter.Value.ToUniversalTime()
+            : DateTime.Now.ToUniversalTime();
+        var response = await _httpClient
+            .GetAsync(
+                $"customers.json?updated_at_min={updatedBreforeString}&updated_at_max={updatedAfterString}",
+                cancellationToken
+            )
+            .ConfigureAwait(false);
+        response.EnsureSuccessStatusCode();
+        var content = await response
+            .Content.ReadAsStringAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var wrapper = JsonSerializer.Deserialize<ShopifyCustomersResponseDto>(content, JsonOptions);
+        return wrapper?.Customers;
     }
 
     public async Task<ShopifyCustomerDto?> PutCustomerAsync(

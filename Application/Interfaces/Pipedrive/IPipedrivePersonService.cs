@@ -4,16 +4,16 @@ namespace Application.Interfaces.Pipedrive;
 
 public interface IPipedrivePersonService
 {
-    Task<PipedrivePersonResponseDto?> CreatePersonAsync(
+    Task<PipedrivePersonDataDto?> CreatePersonAsync(
         PipedrivePersonRequestDto person,
         CancellationToken cancellationToken = default
     );
-    Task<PipedrivePersonResponseDto?> UpdatePersonAsync(
+    Task<PipedrivePersonDataDto?> UpdatePersonAsync(
         int personId,
         PipedrivePersonRequestDto person,
         CancellationToken cancellationToken = default
     );
-    Task<PipedrivePersonResponseDto?> MergePersonsAsync(
+    Task<PipedrivePersonDataDto?> MergePersonsAsync(
         int primaryPersonId,
         int secondaryPersonId,
         CancellationToken cancellationToken = default
@@ -23,16 +23,16 @@ public interface IPipedrivePersonService
         int personId,
         CancellationToken cancellationToken = default
     );
-    Task<List<PipedrivePersonDataDto>> GetPersonsByEmailAsync(
+    Task<List<PipedrivePersonDataDto>?> GetPersonsByEmailAsync(
         string email,
         bool exactMatch = true,
         CancellationToken cancellationToken = default
     );
-    Task<List<PipedrivePersonDataDto>> GetPersonsByPhoneAsync(
+    Task<List<PipedrivePersonDataDto>?> GetPersonsByPhoneAsync(
         string phone,
         CancellationToken cancellationToken = default
     );
-    Task<List<PipedrivePersonDataDto>> GetPersonsByDocumentAsync(
+    Task<List<PipedrivePersonDataDto>?> GetPersonsByDocumentAsync(
         string document,
         CancellationToken cancellationToken = default
     );

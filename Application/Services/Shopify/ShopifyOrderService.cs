@@ -14,6 +14,18 @@ public class ShopifyOrderService(IShopifyClient shopifyClient) : IShopifyOrderSe
         return order ?? throw new InvalidOperationException($"Order {id} not found.");
     }
 
+    public async Task<List<ShopifyOrderDto>> GetOrdersAsync(
+        DateTime? updatedBefore,
+        DateTime? updatedAfter,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var orders = await shopifyClient
+            .GetOrdersAsync(updatedBefore, updatedAfter, cancellationToken)
+            .ConfigureAwait(false);
+        return orders ?? [];
+    }
+
     public async Task<ShopifyOrderDto> UpdateOrderAsync(
         ShopifyOrderRequestDto order,
         CancellationToken cancellationToken = default

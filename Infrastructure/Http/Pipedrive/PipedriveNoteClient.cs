@@ -37,7 +37,7 @@ public class PipedriveNoteClient : IPipedriveNoteClient
         );
     }
 
-    public async Task<PipedriveNotesResponseDto?> GetNotesFromDealAsync(
+    public async Task<List<PipedriveNoteResponseDto>?> GetNotesFromDealAsync(
         int dealId,
         CancellationToken cancellationToken = default
     )
@@ -46,10 +46,11 @@ public class PipedriveNoteClient : IPipedriveNoteClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedriveNotesResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedriveNotesResponseDto>(content, JsonOptions);
+        return jsonData?.Data;
     }
 
-    public async Task<PipedriveNoteCreateResponseDto?> CreateNoteAsync(
+    public async Task<PipedriveNoteResponseDto?> CreateNoteAsync(
         PipedriveNoteRequestDto note,
         CancellationToken cancellationToken = default
     )
@@ -58,6 +59,10 @@ public class PipedriveNoteClient : IPipedriveNoteClient
         var response = await _httpClient.PostAsJsonAsync(url, note, JsonOptions, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedriveNoteCreateResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedriveNoteCreateResponseDto>(
+            content,
+            JsonOptions
+        );
+        return jsonData?.Data;
     }
 }

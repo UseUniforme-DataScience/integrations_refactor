@@ -1,4 +1,4 @@
-using Application.Dtos.Shopify;
+using Application.Dtos.Shopify.Order;
 using Application.Interfaces.Shopify;
 using Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
@@ -15,9 +15,15 @@ public class ShopifyOrderController(IShopifyOrderService orderService) : Control
     public async Task<IActionResult> GetOrderById(long id, CancellationToken cancellationToken) =>
         Ok(await orderService.GetOrderByIdAsync(id, cancellationToken));
 
+    [HttpGet("all")]
+    public async Task<IActionResult> GetOrders(
+        [FromQuery] DateTime? updatedBefore,
+        [FromQuery] DateTime? updatedAfter
+    ) => Ok(await orderService.GetOrdersAsync(updatedBefore, updatedAfter));
+
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateOrder(
-        [FromBody] ShopifyOrderDto order,
+        [FromBody] ShopifyOrderRequestDto order,
         CancellationToken cancellationToken
     ) => Ok(await orderService.UpdateOrderAsync(order, cancellationToken));
 }

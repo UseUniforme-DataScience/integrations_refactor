@@ -1,15 +1,15 @@
-using Application.Dtos.Bling;
+using Application.Dtos.Bling.Order;
 
 namespace Application.Interfaces.Bling;
 
 public interface IBlingOrderService
 {
-    Task<BlingOrderSearchResponseDto> SearchOrderbyShopiyIdAsync(
+    Task<List<BlingOrderSearchDto>?> SearchOrderbyShopiyIdAsync(
         long shopifyId,
         CancellationToken cancellationToken = default
     );
 
-    Task<BlingOrderResponseDto> GetOrderByIdAsync(
+    Task<BlingOrderDto?> GetOrderByIdAsync(
         long orderId,
         CancellationToken cancellationToken = default
     );

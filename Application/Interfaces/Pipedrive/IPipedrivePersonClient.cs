@@ -4,18 +4,18 @@ namespace Application.Interfaces.Pipedrive;
 
 public interface IPipedrivePersonClient
 {
-    Task<PipedrivePersonResponseDto?> CreatePersonAsync(
+    Task<PipedrivePersonDataDto?> CreatePersonAsync(
         PipedrivePersonRequestDto person,
         CancellationToken cancellationToken = default
     );
 
-    Task<PipedrivePersonResponseDto?> UpdatePersonAsync(
+    Task<PipedrivePersonDataDto?> UpdatePersonAsync(
         int personId,
         PipedrivePersonRequestDto person,
         CancellationToken cancellationToken = default
     );
 
-    Task<PipedrivePersonResponseDto?> MergePersonsAsync(
+    Task<PipedrivePersonDataDto?> MergePersonsAsync(
         int primaryPersonId,
         int secondaryPersonId,
         CancellationToken cancellationToken = default
@@ -23,28 +23,28 @@ public interface IPipedrivePersonClient
 
     Task<bool> DeletePersonAsync(int personId, CancellationToken cancellationToken = default);
 
-    Task<PipedrivePersonResponseDto?> GetPersonByIdAsync(
+    Task<PipedrivePersonDataDto?> GetPersonByIdAsync(
         int personId,
         CancellationToken cancellationToken = default
     );
 
-    Task<PipedrivePersonsResponseDto?> GetPersonsByEmailAsync(
+    Task<List<PipedrivePersonDataDto>?> GetPersonsByEmailAsync(
         string email,
         bool exactMatch = true,
         CancellationToken cancellationToken = default
     );
 
-    Task<PipedrivePersonsResponseDto?> GetPersonsByPhoneAsync(
+    Task<List<PipedrivePersonDataDto>?> GetPersonsByPhoneAsync(
         string phone,
         CancellationToken cancellationToken = default
     );
 
-    Task<PipedrivePersonsResponseDto?> GetPersonsByDocumentAsync(
+    Task<List<PipedrivePersonDataDto>?> GetPersonsByDocumentAsync(
         string document,
         CancellationToken cancellationToken = default
     );
 
-    Task<PipedrivePersonResponseDto?> GetPersonWithTwoMatchesAsync(
+    Task<PipedrivePersonDataDto?> GetPersonWithTwoMatchesAsync(
         string email,
         string phone,
         string document,

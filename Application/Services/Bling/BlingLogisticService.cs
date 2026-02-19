@@ -1,11 +1,11 @@
-using Application.Dtos.Bling;
+using Application.Dtos.Bling.Logistic;
 using Application.Interfaces.Bling;
 
 namespace Application.Services.Bling;
 
 public class BlingLogisticService(IBlingClient blingClient) : IBlingLogisticService
 {
-    public async Task<BlingLogisticResponseDto> GetLogisticByIdAsync(
+    public async Task<BlingLogisticDto?> GetLogisticByIdAsync(
         long logisticId,
         CancellationToken cancellationToken = default
     )

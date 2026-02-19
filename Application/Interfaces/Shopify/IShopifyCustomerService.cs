@@ -8,6 +8,11 @@ public interface IShopifyCustomerService
         long id,
         CancellationToken cancellationToken = default
     );
+    Task<List<ShopifyCustomerDto>> GetCustomersAsync(
+        DateTime? updatedBefore,
+        DateTime? updatedAfter,
+        CancellationToken cancellationToken = default
+    );
     Task<ShopifyCustomerDto> UpdateCustomerAsync(
         long id,
         ShopifyCustomerRequestDto customer,

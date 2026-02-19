@@ -1,6 +1,8 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
-using Application.Dtos.Bling;
+using Application.Dtos.Bling.Invoice;
+using Application.Dtos.Bling.Logistic;
+using Application.Dtos.Bling.Order;
 using Application.Interfaces.Bling;
 using Microsoft.Extensions.Configuration;
 
@@ -41,7 +43,7 @@ public class BlingClient : IBlingClient
         PropertyNameCaseInsensitive = true,
     };
 
-    public async Task<BlingOrderSearchResponseDto?> SearchOrderbyShopiyIdAsync(
+    public async Task<List<BlingOrderSearchDto>?> SearchOrderbyShopiyIdAsync(
         long shopifyId,
         CancellationToken cancellationToken = default
     )
@@ -50,10 +52,14 @@ public class BlingClient : IBlingClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<BlingOrderSearchResponseDto>(content, JsonOptions);
+        var responseDto = JsonSerializer.Deserialize<BlingOrderSearchResponseDto>(
+            content,
+            JsonOptions
+        );
+        return responseDto?.Data;
     }
 
-    public async Task<BlingOrderResponseDto?> GetOrderByIdAsync(
+    public async Task<BlingOrderDto?> GetOrderByIdAsync(
         long orderId,
         CancellationToken cancellationToken = default
     )
@@ -62,10 +68,11 @@ public class BlingClient : IBlingClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<BlingOrderResponseDto>(content, JsonOptions);
+        var responseDto = JsonSerializer.Deserialize<BlingOrderResponseDto>(content, JsonOptions);
+        return responseDto?.Data;
     }
 
-    public async Task<BlingInvoiceResponseDto?> GetInvoiceByIdAsync(
+    public async Task<BlingInvoiceDto?> GetInvoiceByIdAsync(
         long invoiceId,
         CancellationToken cancellationToken = default
     )
@@ -74,10 +81,11 @@ public class BlingClient : IBlingClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<BlingInvoiceResponseDto>(content, JsonOptions);
+        var responseDto = JsonSerializer.Deserialize<BlingInvoiceResponseDto>(content, JsonOptions);
+        return responseDto?.Data;
     }
 
-    public async Task<BlingLogisticResponseDto?> GetLogisticByIdAsync(
+    public async Task<BlingLogisticDto?> GetLogisticByIdAsync(
         long logisticId,
         CancellationToken cancellationToken = default
     )
@@ -86,6 +94,10 @@ public class BlingClient : IBlingClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<BlingLogisticResponseDto>(content, JsonOptions);
+        var responseDto = JsonSerializer.Deserialize<BlingLogisticResponseDto>(
+            content,
+            JsonOptions
+        );
+        return responseDto?.Data;
     }
 }

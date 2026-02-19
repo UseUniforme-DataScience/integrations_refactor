@@ -4,12 +4,12 @@ namespace Application.Interfaces.Pipedrive;
 
 public interface IPipedriveNoteClient
 {
-    Task<PipedriveNotesResponseDto?> GetNotesFromDealAsync(
+    Task<List<PipedriveNoteResponseDto>?> GetNotesFromDealAsync(
         int dealId,
         CancellationToken cancellationToken = default
     );
 
-    Task<PipedriveNoteCreateResponseDto?> CreateNoteAsync(
+    Task<PipedriveNoteResponseDto?> CreateNoteAsync(
         PipedriveNoteRequestDto note,
         CancellationToken cancellationToken = default
     );

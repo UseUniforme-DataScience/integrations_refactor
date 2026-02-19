@@ -26,6 +26,7 @@ public class AuthController(ITokenService tokenService, IUserService userService
         }
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     [HttpPost("swagger-login")]
     [Consumes("application/x-www-form-urlencoded")]
     public async Task<IActionResult> SwaggerLogin(

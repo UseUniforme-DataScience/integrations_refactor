@@ -16,6 +16,18 @@ public class ShopifyProductService(IShopifyClient shopifyClient) : IShopifyProdu
         return product ?? throw new InvalidOperationException($"Product {id} not found.");
     }
 
+    public async Task<List<ShopifyProductDto>> GetProductsAsync(
+        DateTime? updatedBefore,
+        DateTime? updatedAfter,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var products = await shopifyClient
+            .GetProductsAsync(updatedBefore, updatedAfter, cancellationToken)
+            .ConfigureAwait(false);
+        return products ?? [];
+    }
+
     public async Task<ShopifyProductDto> UpdateProductAsync(
         ShopifyProductRequestDto product,
         CancellationToken cancellationToken = default

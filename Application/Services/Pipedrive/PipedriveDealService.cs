@@ -5,17 +5,28 @@ namespace Application.Services.Pipedrive;
 
 public class PipedriveDealService(IPipedriveDealClient dealClient) : IPipedriveDealService
 {
-    public async Task<PipedriveGetDealResponseDto?> GetDealByIdAsync(
+    public async Task<PipedriveDealResponseDto?> GetDealByIdAsync(
         int dealId,
         CancellationToken cancellationToken = default
-    ) => await dealClient.GetDealByIdAsync(dealId, cancellationToken).ConfigureAwait(false);
+    )
+    {
+        var response = await dealClient
+            .GetDealByIdAsync(dealId, cancellationToken)
+            .ConfigureAwait(false);
+        return response?.Data;
+    }
 
-    public async Task<PipedriveDealsListResponseDto?> GetDealsByPersonAsync(
+    public async Task<List<PipedriveDealListResponseDto>?> GetDealsByPersonAsync(
         int personId,
         CancellationToken cancellationToken = default
-    ) => await dealClient.GetDealsByPersonAsync(personId, cancellationToken).ConfigureAwait(false);
+    )
+    {
+        return await dealClient
+            .GetDealsByPersonAsync(personId, cancellationToken)
+            .ConfigureAwait(false);
+    }
 
-    public async Task<PipedriveDealsListResponseDto?> GetDealsByPersonWithArchivedAsync(
+    public async Task<List<PipedriveDealListResponseDto>?> GetDealsByPersonWithArchivedAsync(
         int personId,
         CancellationToken cancellationToken = default
     ) =>
@@ -23,7 +34,7 @@ public class PipedriveDealService(IPipedriveDealClient dealClient) : IPipedriveD
             .GetDealsByPersonWithArchivedAsync(personId, cancellationToken)
             .ConfigureAwait(false);
 
-    public async Task<PipedriveDealsResponseDto?> GetOpenDealsByPersonAsync(
+    public async Task<List<PipedriveDealResponseDto>?> GetOpenDealsByPersonAsync(
         int personId,
         CancellationToken cancellationToken = default
     ) =>

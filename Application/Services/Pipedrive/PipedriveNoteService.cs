@@ -5,12 +5,12 @@ namespace Application.Services.Pipedrive;
 
 public class PipedriveNoteService(IPipedriveNoteClient noteClient) : IPipedriveNoteService
 {
-    public async Task<PipedriveNotesResponseDto?> GetNotesFromDealAsync(
+    public async Task<List<PipedriveNoteResponseDto>?> GetNotesFromDealAsync(
         int dealId,
         CancellationToken cancellationToken = default
     ) => await noteClient.GetNotesFromDealAsync(dealId, cancellationToken).ConfigureAwait(false);
 
-    public async Task<PipedriveNoteCreateResponseDto?> CreateNoteAsync(
+    public async Task<PipedriveNoteResponseDto?> CreateNoteAsync(
         PipedriveNoteRequestDto note,
         CancellationToken cancellationToken = default
     ) => await noteClient.CreateNoteAsync(note, cancellationToken).ConfigureAwait(false);

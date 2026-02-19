@@ -41,7 +41,7 @@ public class PipedrivePersonClient : IPipedrivePersonClient
         );
     }
 
-    public async Task<PipedrivePersonResponseDto?> CreatePersonAsync(
+    public async Task<PipedrivePersonDataDto?> CreatePersonAsync(
         PipedrivePersonRequestDto person,
         CancellationToken cancellationToken = default
     )
@@ -55,7 +55,8 @@ public class PipedrivePersonClient : IPipedrivePersonClient
         );
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedrivePersonResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedrivePersonResponseDto>(content, JsonOptions);
+        return jsonData?.Data;
     }
 
     public async Task<bool> DeletePersonAsync(
@@ -69,7 +70,7 @@ public class PipedrivePersonClient : IPipedrivePersonClient
         return true;
     }
 
-    public async Task<PipedrivePersonResponseDto?> MergePersonsAsync(
+    public async Task<PipedrivePersonDataDto?> MergePersonsAsync(
         int primaryPersonId,
         int secondaryPersonId,
         CancellationToken cancellationToken = default
@@ -80,10 +81,11 @@ public class PipedrivePersonClient : IPipedrivePersonClient
         var response = await _httpClient.PutAsJsonAsync(url, body, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedrivePersonResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedrivePersonResponseDto>(content, JsonOptions);
+        return jsonData?.Data;
     }
 
-    public async Task<PipedrivePersonResponseDto?> UpdatePersonAsync(
+    public async Task<PipedrivePersonDataDto?> UpdatePersonAsync(
         int personId,
         PipedrivePersonRequestDto person,
         CancellationToken cancellationToken = default
@@ -98,10 +100,11 @@ public class PipedrivePersonClient : IPipedrivePersonClient
         );
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedrivePersonResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedrivePersonResponseDto>(content, JsonOptions);
+        return jsonData?.Data;
     }
 
-    public async Task<PipedrivePersonResponseDto?> GetPersonByIdAsync(
+    public async Task<PipedrivePersonDataDto?> GetPersonByIdAsync(
         int personId,
         CancellationToken cancellationToken = default
     )
@@ -110,10 +113,11 @@ public class PipedrivePersonClient : IPipedrivePersonClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedrivePersonResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedrivePersonResponseDto>(content, JsonOptions);
+        return jsonData?.Data;
     }
 
-    public async Task<PipedrivePersonsResponseDto?> GetPersonsByDocumentAsync(
+    public async Task<List<PipedrivePersonDataDto>?> GetPersonsByDocumentAsync(
         string document,
         CancellationToken cancellationToken = default
     )
@@ -124,10 +128,14 @@ public class PipedrivePersonClient : IPipedrivePersonClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedrivePersonsResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedrivePersonsResponseDto>(
+            content,
+            JsonOptions
+        );
+        return jsonData?.Data ?? [];
     }
 
-    public async Task<PipedrivePersonsResponseDto?> GetPersonsByEmailAsync(
+    public async Task<List<PipedrivePersonDataDto>?> GetPersonsByEmailAsync(
         string email,
         bool exactMatch = true,
         CancellationToken cancellationToken = default
@@ -139,10 +147,14 @@ public class PipedrivePersonClient : IPipedrivePersonClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedrivePersonsResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedrivePersonsResponseDto>(
+            content,
+            JsonOptions
+        );
+        return jsonData?.Data ?? [];
     }
 
-    public async Task<PipedrivePersonsResponseDto?> GetPersonsByPhoneAsync(
+    public async Task<List<PipedrivePersonDataDto>?> GetPersonsByPhoneAsync(
         string phone,
         CancellationToken cancellationToken = default
     )
@@ -153,10 +165,14 @@ public class PipedrivePersonClient : IPipedrivePersonClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedrivePersonsResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedrivePersonsResponseDto>(
+            content,
+            JsonOptions
+        );
+        return jsonData?.Data ?? [];
     }
 
-    public async Task<PipedrivePersonResponseDto?> GetPersonWithTwoMatchesAsync(
+    public async Task<PipedrivePersonDataDto?> GetPersonWithTwoMatchesAsync(
         string email,
         string phone,
         string document,
@@ -169,15 +185,15 @@ public class PipedrivePersonClient : IPipedrivePersonClient
 
         List<int> personIds = [];
 
-        foreach (var match in emailMatches?.Data ?? [])
+        foreach (var match in emailMatches ?? [])
         {
             personIds.Add(match.Id);
         }
-        foreach (var match in phoneMatches?.Data ?? [])
+        foreach (var match in phoneMatches ?? [])
         {
             personIds.Add(match.Id);
         }
-        foreach (var match in documentMatches?.Data ?? [])
+        foreach (var match in documentMatches ?? [])
         {
             personIds.Add(match.Id);
         }

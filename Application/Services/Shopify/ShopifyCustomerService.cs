@@ -16,6 +16,18 @@ public class ShopifyCustomerService(IShopifyClient shopifyClient) : IShopifyCust
         return customer ?? throw new InvalidOperationException($"Customer {id} not found.");
     }
 
+    public async Task<List<ShopifyCustomerDto>> GetCustomersAsync(
+        DateTime? updatedBefore,
+        DateTime? updatedAfter,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var customers = await shopifyClient
+            .GetCustomersAsync(updatedBefore, updatedAfter, cancellationToken)
+            .ConfigureAwait(false);
+        return customers ?? [];
+    }
+
     public async Task<ShopifyCustomerDto> UpdateCustomerAsync(
         long id,
         ShopifyCustomerRequestDto customer,

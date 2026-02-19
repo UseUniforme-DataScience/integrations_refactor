@@ -49,7 +49,11 @@ public class PipedriveDealClient : IPipedriveDealClient
         var response = await _httpClient.PostAsJsonAsync(url, deal, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedriveDealResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedriveGetDealResponseDto>(
+            content,
+            JsonOptions
+        );
+        return jsonData?.Data;
     }
 
     // public async Task<PipedriveDealResponseDto?> CreateOrUpdateDealAndDeleteOthersAsync(
@@ -103,7 +107,11 @@ public class PipedriveDealClient : IPipedriveDealClient
         var response = await _httpClient.PostAsJsonAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedriveDealResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedriveGetDealResponseDto>(
+            content,
+            JsonOptions
+        );
+        return jsonData?.Data;
     }
 
     public async Task<PipedriveGetDealResponseDto?> GetDealByIdAsync(
@@ -118,7 +126,7 @@ public class PipedriveDealClient : IPipedriveDealClient
         return JsonSerializer.Deserialize<PipedriveGetDealResponseDto>(content, JsonOptions);
     }
 
-    public async Task<PipedriveDealsListResponseDto?> GetDealsByPersonAsync(
+    public async Task<List<PipedriveDealListResponseDto>?> GetDealsByPersonAsync(
         int personId,
         CancellationToken cancellationToken = default
     )
@@ -129,10 +137,14 @@ public class PipedriveDealClient : IPipedriveDealClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedriveDealsListResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedriveDealsListResponseDto>(
+            content,
+            JsonOptions
+        );
+        return jsonData?.Data ?? [];
     }
 
-    public async Task<PipedriveDealsListResponseDto?> GetDealsByPersonWithArchivedAsync(
+    public async Task<List<PipedriveDealListResponseDto>?> GetDealsByPersonWithArchivedAsync(
         int personId,
         CancellationToken cancellationToken = default
     )
@@ -143,10 +155,14 @@ public class PipedriveDealClient : IPipedriveDealClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedriveDealsListResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedriveDealsListResponseDto>(
+            content,
+            JsonOptions
+        );
+        return jsonData?.Data ?? [];
     }
 
-    public async Task<PipedriveDealsResponseDto?> GetOpenDealsByPersonAsync(
+    public async Task<List<PipedriveDealResponseDto>?> GetOpenDealsByPersonAsync(
         int personId,
         CancellationToken cancellationToken = default
     )
@@ -157,7 +173,8 @@ public class PipedriveDealClient : IPipedriveDealClient
         var response = await _httpClient.GetAsync(url, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedriveDealsResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedriveDealsResponseDto>(content, JsonOptions);
+        return jsonData?.Data ?? [];
     }
 
     public async Task<PipedriveDealResponseDto?> UpdateDealAsync(
@@ -170,7 +187,11 @@ public class PipedriveDealClient : IPipedriveDealClient
         var response = await _httpClient.PutAsJsonAsync(url, deal, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedriveDealResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedriveGetDealResponseDto>(
+            content,
+            JsonOptions
+        );
+        return jsonData?.Data;
     }
 
     public async Task<PipedriveDealResponseDto?> MergeDealsAsync(
@@ -184,6 +205,10 @@ public class PipedriveDealClient : IPipedriveDealClient
         var response = await _httpClient.PostAsJsonAsync(url, body, cancellationToken);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PipedriveDealResponseDto>(content, JsonOptions);
+        var jsonData = JsonSerializer.Deserialize<PipedriveGetDealResponseDto>(
+            content,
+            JsonOptions
+        );
+        return jsonData?.Data;
     }
 }

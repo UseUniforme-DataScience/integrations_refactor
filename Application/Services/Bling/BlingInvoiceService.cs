@@ -1,11 +1,11 @@
-using Application.Dtos.Bling;
+using Application.Dtos.Bling.Invoice;
 using Application.Interfaces.Bling;
 
 namespace Application.Services.Bling;
 
 public class BlingInvoiceService(IBlingClient blingClient) : IBlingInvoiceService
 {
-    public async Task<BlingInvoiceResponseDto> GetInvoiceByIdAsync(
+    public async Task<BlingInvoiceDto?> GetInvoiceByIdAsync(
         long invoiceId,
         CancellationToken cancellationToken
     )
