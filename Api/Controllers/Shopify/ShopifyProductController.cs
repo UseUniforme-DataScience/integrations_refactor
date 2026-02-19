@@ -1,4 +1,4 @@
-using Application.Dtos.Shopify;
+using Application.Dtos.Shopify.Product;
 using Application.Interfaces.Shopify;
 using Domain.Constants;
 using Microsoft.AspNetCore.Authorization;

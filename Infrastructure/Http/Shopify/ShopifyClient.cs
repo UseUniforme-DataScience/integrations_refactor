@@ -1,7 +1,9 @@
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using Application.Dtos.Shopify;
+using Application.Dtos.Shopify.Customer;
+using Application.Dtos.Shopify.Order;
+using Application.Dtos.Shopify.Product;
 using Application.Interfaces.Shopify;
 using Microsoft.Extensions.Options;
 
@@ -46,7 +48,7 @@ public class ShopifyClient : IShopifyClient
 
     public async Task<ShopifyOrderDto?> PutOrderAsync(
         long id,
-        ShopifyOrderDto order,
+        ShopifyOrderRequestDto order,
         CancellationToken cancellationToken = default
     )
     {
@@ -84,7 +86,7 @@ public class ShopifyClient : IShopifyClient
 
     public async Task<ShopifyProductDto?> PutProductAsync(
         long id,
-        ShopifyProductDto product,
+        ShopifyProductRequestDto product,
         CancellationToken cancellationToken = default
     )
     {
@@ -122,7 +124,7 @@ public class ShopifyClient : IShopifyClient
 
     public async Task<ShopifyCustomerDto?> PutCustomerAsync(
         long id,
-        ShopifyCustomerDto customer,
+        ShopifyCustomerRequestDto customer,
         CancellationToken cancellationToken = default
     )
     {

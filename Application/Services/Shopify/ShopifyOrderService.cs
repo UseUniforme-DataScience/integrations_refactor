@@ -1,4 +1,4 @@
-using Application.Dtos.Shopify;
+using Application.Dtos.Shopify.Order;
 using Application.Interfaces.Shopify;
 
 namespace Application.Services.Shopify;
@@ -15,7 +15,7 @@ public class ShopifyOrderService(IShopifyClient shopifyClient) : IShopifyOrderSe
     }
 
     public async Task<ShopifyOrderDto> UpdateOrderAsync(
-        ShopifyOrderDto order,
+        ShopifyOrderRequestDto order,
         CancellationToken cancellationToken = default
     )
     {

@@ -1,0 +1,60 @@
+using System.Text.Json.Serialization;
+
+namespace Application.Dtos.Shopify.Order;
+
+public class ShopifyOrderFulfillmentDto
+{
+    [JsonPropertyName("id")]
+    public long Id { get; set; }
+
+    [JsonPropertyName("admin_graphql_api_id")]
+    public string? AdminGraphqlApiId { get; set; }
+
+    [JsonPropertyName("created_at")]
+    public DateTime CreatedAt { get; set; }
+
+    [JsonPropertyName("location_id")]
+    public long? LocationId { get; set; }
+
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
+
+    [JsonPropertyName("order_id")]
+    public long OrderId { get; set; }
+
+    [JsonPropertyName("origin_address")]
+    public object? OriginAddress { get; set; }
+
+    [JsonPropertyName("receipt")]
+    public object? Receipt { get; set; }
+
+    [JsonPropertyName("service")]
+    public string? Service { get; set; }
+
+    [JsonPropertyName("shipment_status")]
+    public string? ShipmentStatus { get; set; }
+
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    [JsonPropertyName("tracking_company")]
+    public string? TrackingCompany { get; set; }
+
+    [JsonPropertyName("tracking_number")]
+    public string? TrackingNumber { get; set; }
+
+    [JsonPropertyName("tracking_numbers")]
+    public List<string>? TrackingNumbers { get; set; } = [];
+
+    [JsonPropertyName("tracking_url")]
+    public string? TrackingUrl { get; set; }
+
+    [JsonPropertyName("tracking_urls")]
+    public List<string>? TrackingUrls { get; set; } = [];
+
+    [JsonPropertyName("updated_at")]
+    public DateTime UpdatedAt { get; set; }
+
+    [JsonPropertyName("line_items")]
+    public List<ShopifyOrderLineItemDto>? LineItems { get; set; } = [];
+}

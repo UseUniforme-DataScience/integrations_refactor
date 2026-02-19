@@ -1,4 +1,6 @@
-using Application.Dtos.Shopify;
+using Application.Dtos.Shopify.Customer;
+using Application.Dtos.Shopify.Order;
+using Application.Dtos.Shopify.Product;
 
 namespace Application.Interfaces.Shopify;
 
@@ -7,7 +9,7 @@ public interface IShopifyClient
     Task<ShopifyOrderDto?> GetOrderAsync(long id, CancellationToken cancellationToken = default);
     Task<ShopifyOrderDto?> PutOrderAsync(
         long id,
-        ShopifyOrderDto order,
+        ShopifyOrderRequestDto order,
         CancellationToken cancellationToken = default
     );
 
@@ -17,7 +19,7 @@ public interface IShopifyClient
     );
     Task<ShopifyProductDto?> PutProductAsync(
         long id,
-        ShopifyProductDto product,
+        ShopifyProductRequestDto product,
         CancellationToken cancellationToken = default
     );
 
@@ -27,7 +29,7 @@ public interface IShopifyClient
     );
     Task<ShopifyCustomerDto?> PutCustomerAsync(
         long id,
-        ShopifyCustomerDto customer,
+        ShopifyCustomerRequestDto customer,
         CancellationToken cancellationToken = default
     );
 }
