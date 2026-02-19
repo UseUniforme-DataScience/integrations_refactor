@@ -1,10 +1,13 @@
 using Application.Interfaces.Bling;
+using Domain.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers;
+namespace Api.Controllers.Bling;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = Roles.admin)]
 public class BlingLogisticController(IBlingLogisticService logisticService) : ControllerBase
 {
     [HttpGet("{logisticId}")]

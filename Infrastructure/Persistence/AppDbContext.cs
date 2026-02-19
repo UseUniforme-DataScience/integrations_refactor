@@ -1,3 +1,4 @@
+using Domain.Entities;
 using Domain.Entities.Shopify;
 using Infrastructure.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<ShopifyProducts> ShopifyProducts => Set<ShopifyProducts>();
 
     public DbSet<ShopifyOrder> ShopifyOrders => Set<ShopifyOrder>();
+
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

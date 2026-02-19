@@ -1,11 +1,14 @@
 using Application.Dtos.Pipedrive.Person;
 using Application.Interfaces.Pipedrive;
+using Domain.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Pipedrive;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = Roles.admin)]
 public class PipedrivePersonController(IPipedrivePersonService personService) : ControllerBase
 {
     [HttpGet("{personId}")]

@@ -1,9 +1,12 @@
 using Application.Interfaces.Bling;
+using Domain.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers;
+namespace Api.Controllers.Bling;
 
 [ApiController]
+[Authorize(Roles = Roles.admin)]
 [Route("api/[controller]")]
 public class BlingOrderController(IBlingOrderService orderService) : ControllerBase
 {

@@ -1,11 +1,14 @@
 using Application.Dtos.Pipedrive.Note;
 using Application.Interfaces.Pipedrive;
+using Domain.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Pipedrive;
 
 [ApiController]
 [Route("api/pipedrive/notes")]
+[Authorize(Roles = Roles.admin)]
 public class PipedriveNoteController(IPipedriveNoteService noteService) : ControllerBase
 {
     [HttpGet("deal/{dealId}")]

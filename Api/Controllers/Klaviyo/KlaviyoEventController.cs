@@ -1,11 +1,14 @@
 using Application.Dtos.Klaviyo;
 using Application.Interfaces.Klaviyo;
+using Domain.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Klaviyo;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = Roles.admin)]
 public class KlaviyoEventController(IKlaviyoEventService klaviyoEventService) : ControllerBase
 {
     [HttpPost]

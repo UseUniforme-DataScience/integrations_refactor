@@ -1,6 +1,9 @@
+using System.Text;
 using DotNetEnv.Configuration;
 using Infrastructure.Configurations;
-using Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 // Carregar variáveis do arquivo .env
 DotNetEnv.Env.Load("../.env");
@@ -9,42 +12,140 @@ var builder = WebApplication.CreateBuilder(args);
 
 AppContext.SetSwitch("System.Net.DisableIPv6", true);
 
-// Add services to the container.
+// ======================================================
+// Controllers
+// ======================================================
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+
+// ======================================================
+// Swagger
+// =====================================================
+builder.Services.AddSwaggerGen(options =>
 {
-    c.SwaggerDoc("v1", new() { Title = "Integrations API", Version = "v1" });
+    options.SwaggerDoc(
+        "v1",
+        new OpenApiInfo
+        {
+            Title = "CheckoutDF API",
+            Version = "v1",
+            Description = "API para o integração com o checkout do DF",
+        }
+    );
+
+    // options.AddSecurityDefinition(
+    //     "Bearer",
+    //     new OpenApiSecurityScheme
+    //     {
+    //         Description = "JWT Authorization header. Use: Bearer {token}",
+    //         Name = "Authorization",
+    //         In = ParameterLocation.Header,
+    //         Type = SecuritySchemeType.Http,
+    //         Scheme = "bearer",
+    //         BearerFormat = "JWT",
+    //     }
+    // );
+
+    options.AddSecurityDefinition(
+        "oauth2",
+        new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.OAuth2,
+            Flows = new OpenApiOAuthFlows
+            {
+                Password = new OpenApiOAuthFlow
+                {
+                    TokenUrl = new Uri("/api/Auth/swagger-login", UriKind.Relative),
+                    Scopes = new Dictionary<string, string>(),
+                },
+            },
+        }
+    );
+
+    options.AddSecurityRequirement(
+        new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "oauth2",
+                    },
+                },
+                new string[] { }
+            },
+        }
+    );
 });
 
+// ======================================================
+// Configuration
+// ======================================================
 builder.Configuration.AddEnvironmentVariables();
 builder.Configuration.AddDotNetEnv();
-var config = builder.Configuration.AddJsonFile(
-    "appsettings.json",
-    optional: false,
-    reloadOnChange: true
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+// 🔐 Chave JWT (UTF8 correto)
+var key = Encoding.UTF8.GetBytes(
+    builder.Configuration["Authentication:PrivateKey"]
+        ?? throw new InvalidOperationException("Private key is not configured")
 );
 
 // ======================================================
-// Infrastructure/ Dependencies injection
+// Authentication
+// ======================================================
+builder
+    .Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.MapInboundClaims = false; // evita mapeamento automático estranho
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ClockSkew = TimeSpan.Zero,
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+
+            // 🔥 Como seu token usa "role"
+            RoleClaimType = "role",
+        };
+
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+    });
+
+// ======================================================
+// Infrastructure DI
 // ======================================================
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ======================================================
+// Swagger UI
+// ======================================================
 app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Integrations API v1"));
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Integrations API v1");
+});
 
+// ======================================================
+// Middleware
+// ======================================================
 app.UseHttpsRedirection();
 
-// pré criando conexão com o banco de dados
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await context.Database.CanConnectAsync();
-}
+app.UseAuthentication(); // 🔐 Primeiro autentica
+app.UseAuthorization(); // 🔐 Depois autoriza
 
 app.MapControllers();
 

@@ -6,13 +6,17 @@ using Application.Services.Bling;
 using Application.Services.Klaviyo;
 using Application.Services.Pipedrive;
 using Application.Services.Shopify;
+using Domain.Interfaces;
+using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Repositories.Shopify;
 using Infrastructure.Http.Bling;
 using Infrastructure.Http.Klaviyo;
 using Infrastructure.Http.Pipedrive;
 using Infrastructure.Http.Shopify;
 using Infrastructure.Persistence;
+using Infrastructure.Persistence.Repositories;
 using Infrastructure.Persistence.Repositories.Shopify;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,8 +43,8 @@ public static class DependencyInjection
             SslKey = configuration["MySql:ClientKeyPath"],
 
             Pooling = true,
-            MinimumPoolSize = 20,
-            MaximumPoolSize = 120,
+            MinimumPoolSize = 1, // mudar para 20
+            MaximumPoolSize = 2, // mudar para 120
             ConnectionTimeout = 60,
             DefaultCommandTimeout = 60,
         }.ConnectionString;
@@ -91,9 +95,17 @@ public static class DependencyInjection
         services.AddScoped<IPipedriveActivityService, PipedriveActivityService>();
         services.AddScoped<IPipedrivePersonService, PipedrivePersonService>();
 
-        // Repositories
-        services.AddScoped<IShopifyOrderRepository, ShopifyOrderRepository>();
+        // User
+        services.AddScoped<IUserService, UserService>();
 
+        // Token
+        services.AddScoped<ITokenService, TokenService>();
+
+        // Repositories
+        // Shopify
+        services.AddScoped<IShopifyOrderRepository, ShopifyOrderRepository>();
+        // User
+        services.AddScoped<IUserRepository, UserRepository>();
         return services;
     }
 }

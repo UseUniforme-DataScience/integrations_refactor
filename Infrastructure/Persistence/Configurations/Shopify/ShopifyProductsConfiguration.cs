@@ -2,7 +2,7 @@ using Domain.Entities.Shopify;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configurations;
+namespace Infrastructure.Persistence.Configurations.Shopify;
 
 public class ShopifyProductsConfiguration : IEntityTypeConfiguration<ShopifyProducts>
 {

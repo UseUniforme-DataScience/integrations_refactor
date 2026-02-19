@@ -1,10 +1,13 @@
 using Application.Interfaces.Pipedrive;
+using Domain.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Pipedrive;
 
 [ApiController]
 [Route("api/pipedrive/activities")]
+[Authorize(Roles = Roles.admin)]
 public class PipedriveActivityController(IPipedriveActivityService activityService) : ControllerBase
 {
     [HttpGet("deal/{dealId}")]
