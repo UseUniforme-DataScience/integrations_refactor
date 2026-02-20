@@ -1,4 +1,4 @@
-using Application.Dtos.Bling;
+using Application.Dtos.Bling.Token;
 using Application.Interfaces.Bling;
 
 namespace Application.Services.Bling;

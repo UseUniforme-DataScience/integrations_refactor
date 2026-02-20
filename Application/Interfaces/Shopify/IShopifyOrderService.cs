@@ -4,13 +4,16 @@ namespace Application.Interfaces.Shopify;
 
 public interface IShopifyOrderService
 {
-    Task<ShopifyOrderDto> GetOrderByIdAsync(long id, CancellationToken cancellationToken = default);
-    Task<List<ShopifyOrderDto>> GetOrdersAsync(
+    Task<ShopifyOrderDto?> GetOrderByIdAsync(
+        long id,
+        CancellationToken cancellationToken = default
+    );
+    Task<List<ShopifyOrderDto>?> GetOrdersAsync(
         DateTime? updatedBefore,
         DateTime? updatedAfter,
         CancellationToken cancellationToken = default
     );
-    Task<ShopifyOrderDto> UpdateOrderAsync(
+    Task<ShopifyOrderDto?> UpdateOrderAsync(
         ShopifyOrderRequestDto order,
         CancellationToken cancellationToken = default
     );

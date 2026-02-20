@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Application.Dtos.Bling;
+namespace Application.Dtos.Bling.Token;
 
 public class BlingAccessTokenResponseDto
 {

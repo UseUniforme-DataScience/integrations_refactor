@@ -27,9 +27,9 @@ builder.Services.AddSwaggerGen(options =>
         "v1",
         new OpenApiInfo
         {
-            Title = "CheckoutDF API",
+            Title = "Integrations API",
             Version = "v1",
-            Description = "API para o integração com o checkout do DF",
+            Description = "API para integração com sistemas externos",
         }
     );
 

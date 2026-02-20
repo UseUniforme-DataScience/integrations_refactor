@@ -4,16 +4,16 @@ namespace Application.Interfaces.Shopify;
 
 public interface IShopifyProductService
 {
-    Task<ShopifyProductDto> GetProductByIdAsync(
+    Task<ShopifyProductDto?> GetProductByIdAsync(
         long id,
         CancellationToken cancellationToken = default
     );
-    Task<List<ShopifyProductDto>> GetProductsAsync(
+    Task<List<ShopifyProductDto>?> GetProductsAsync(
         DateTime? updatedBefore,
         DateTime? updatedAfter,
         CancellationToken cancellationToken = default
     );
-    Task<ShopifyProductDto> UpdateProductAsync(
+    Task<ShopifyProductDto?> UpdateProductAsync(
         ShopifyProductRequestDto product,
         CancellationToken cancellationToken = default
     );

@@ -20,6 +20,7 @@ using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 
 namespace Infrastructure.Configurations;
 
@@ -30,6 +31,7 @@ public static class DependencyInjection
         IConfiguration configuration
     )
     {
+        // MySQL
         var mySqlConnectionString = new MySqlConnector.MySqlConnectionStringBuilder
         {
             Server = configuration["MySql:Host"],
@@ -49,7 +51,6 @@ public static class DependencyInjection
             DefaultCommandTimeout = 60,
         }.ConnectionString;
 
-        // DbContext principal (MySQL)
         services.AddDbContextPool<AppDbContext>(options =>
         {
             if (string.IsNullOrWhiteSpace(mySqlConnectionString))
@@ -57,6 +58,24 @@ public static class DependencyInjection
                 throw new InvalidOperationException("MySQL connection string is invalid.");
             }
             options.UseMySql(mySqlConnectionString, new MySqlServerVersion(new Version(8, 4, 7)));
+        });
+
+        // Redis
+        var redisOptions = new ConfigurationOptions
+        {
+            EndPoints = { $"{configuration["Redis:Host"]}:{configuration["Redis:Port"]}" },
+            Password = configuration["Redis:Password"],
+            AbortOnConnectFail = false,
+            AsyncTimeout = 5000,
+            ConnectTimeout = 5000,
+            ConnectRetry = 5,
+            ClientName = "USE-INTEGRATIONS-REDIS",
+            DefaultDatabase = 0,
+        };
+
+        services.AddSingleton<IConnectionMultiplexer>(_ =>
+        {
+            return ConnectionMultiplexer.Connect(redisOptions);
         });
 
         // Http clients / integrações externas
@@ -74,6 +93,9 @@ public static class DependencyInjection
         services.AddPipedrivePersonClient();
 
         // Services
+        // Redis
+        services.AddSingleton<IRedisService, RedisService>();
+
         // Bling
         services.AddSingleton<IBlingTokenService, BlingTokenService>();
 

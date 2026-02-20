@@ -2,8 +2,12 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using Application.Constants;
+using Application.Constants.Caching;
 using Application.Dtos.Bling;
+using Application.Dtos.Bling.Token;
 using Application.Interfaces.Bling;
+using Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Http.Bling;
@@ -11,6 +15,7 @@ namespace Infrastructure.Http.Bling;
 public class BlingTokenClient : IBlingTokenClient
 {
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IRedisService _redisService;
     private string _codeUrl = string.Empty;
     private string _tokenBaseUrl = string.Empty;
     private string _clientId = string.Empty;
@@ -29,10 +34,15 @@ public class BlingTokenClient : IBlingTokenClient
         PropertyNameCaseInsensitive = true,
     };
 
-    public BlingTokenClient(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+    public BlingTokenClient(
+        IHttpClientFactory httpClientFactory,
+        IConfiguration configuration,
+        IRedisService redisService
+    )
     {
         _httpClientFactory = httpClientFactory;
-
+        _redisService = redisService;
+        LoadCachedAccessTokenAsync().GetAwaiter().GetResult();
         LoadEnvironmentVariables(configuration);
         GetOrRefreshAccessTokenAsync().GetAwaiter().GetResult();
     }
@@ -40,7 +50,7 @@ public class BlingTokenClient : IBlingTokenClient
     private HttpClient GetHttpClient() =>
         _httpClientFactory.CreateClient(BlingServiceCollection.BlingTokenHttpClientName);
 
-    private void SetTokenData(BlingAccessTokenResponseDto? tokenData)
+    private async void SetTokenData(BlingAccessTokenResponseDto? tokenData)
     {
         _accessToken = tokenData?.AccessToken ?? null!;
         _expiresIn = tokenData?.ExpiresIn ?? 0;
@@ -48,6 +58,8 @@ public class BlingTokenClient : IBlingTokenClient
         _refreshToken = tokenData?.RefreshToken ?? null!;
         _scope = tokenData?.Scope ?? null!;
         _obtainedAt = tokenData?.ObtainedAt ?? DateTime.UtcNow;
+
+        await SaveTokenToCacheAsync(tokenData);
     }
 
     private void LoadEnvironmentVariables(IConfiguration configuration)
@@ -208,6 +220,7 @@ public class BlingTokenClient : IBlingTokenClient
             var accessToken =
                 await RefreshAccessTokenAsync(cancellationToken).ConfigureAwait(false)
                 ?? throw new InvalidOperationException("Failed to refresh access token");
+
             SetTokenData(accessToken);
 
             return accessToken;
@@ -222,5 +235,30 @@ public class BlingTokenClient : IBlingTokenClient
             Scope = _scope,
             ObtainedAt = _obtainedAt,
         };
+    }
+
+    public async Task<bool> LoadCachedAccessTokenAsync()
+    {
+        var cached = await _redisService.GetAsync(BlingConstants.BlingToken);
+        if (cached is null)
+        {
+            return false;
+        }
+        SetTokenData(JsonSerializer.Deserialize<BlingAccessTokenResponseDto>(cached, JsonOptions));
+        return true;
+    }
+
+    public async Task<bool> SaveTokenToCacheAsync(BlingAccessTokenResponseDto? tokenData)
+    {
+        if (tokenData is null)
+        {
+            return false;
+        }
+        await _redisService.SetAsync(
+            BlingConstants.BlingToken,
+            JsonSerializer.Serialize(tokenData, JsonOptions),
+            CacheDurations.BlingToken
+        );
+        return true;
     }
 }

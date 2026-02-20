@@ -52,15 +52,9 @@ public class ShopifyClient : IShopifyClient
         CancellationToken cancellationToken = default
     )
     {
-        var updatedBreforeString = updatedBefore is not null
-            ? updatedBefore.Value.ToUniversalTime()
-            : DateTime.Now.AddDays(-7).ToUniversalTime();
-        var updatedAfterString = updatedAfter is not null
-            ? updatedAfter.Value.ToUniversalTime()
-            : DateTime.Now.ToUniversalTime();
         var response = await _httpClient
             .GetAsync(
-                $"orders.json?updated_at_min={updatedBreforeString}&updated_at_max={updatedAfterString}",
+                $"orders.json?updated_at_min={updatedBefore}&updated_at_max={updatedAfter}",
                 cancellationToken
             )
             .ConfigureAwait(false);
@@ -116,15 +110,9 @@ public class ShopifyClient : IShopifyClient
         CancellationToken cancellationToken = default
     )
     {
-        var updatedBreforeString = updatedBefore is not null
-            ? updatedBefore.Value.ToUniversalTime()
-            : DateTime.Now.AddDays(-7).ToUniversalTime();
-        var updatedAfterString = updatedAfter is not null
-            ? updatedAfter.Value.ToUniversalTime()
-            : DateTime.Now.ToUniversalTime();
         var response = await _httpClient
             .GetAsync(
-                $"products.json?updated_at_min={updatedBreforeString}&updated_at_max={updatedAfterString}",
+                $"products.json?updated_at_min={updatedBefore}&updated_at_max={updatedAfter}",
                 cancellationToken
             )
             .ConfigureAwait(false);
@@ -180,15 +168,9 @@ public class ShopifyClient : IShopifyClient
         CancellationToken cancellationToken = default
     )
     {
-        var updatedBreforeString = updatedBefore is not null
-            ? updatedBefore.Value.ToUniversalTime()
-            : DateTime.Now.AddDays(-7).ToUniversalTime();
-        var updatedAfterString = updatedAfter is not null
-            ? updatedAfter.Value.ToUniversalTime()
-            : DateTime.Now.ToUniversalTime();
         var response = await _httpClient
             .GetAsync(
-                $"customers.json?updated_at_min={updatedBreforeString}&updated_at_max={updatedAfterString}",
+                $"customers.json?updated_at_min={updatedBefore}&updated_at_max={updatedAfter}",
                 cancellationToken
             )
             .ConfigureAwait(false);
